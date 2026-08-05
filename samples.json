@@ -70,5 +70,40 @@
     "status": 200,
     "url": "/api/v1/test_drive/available_slots.php?api_key={{api_key}}&showroom_id=6&car_model=New+Duster+%2F+Showroom&date=2026-08-05&brand_id=5",
     "body": "{\n  \"success\": true,\n  \"date\": \"2026-08-05\",\n  \"showroom_id\": 6,\n  \"is_holiday\": false,\n  \"holiday_name\": \"\",\n  \"is_dayoff\": false,\n  \"capacity\": 10,\n  \"booked\": 0,\n  \"total_slots\": 10,\n  \"car\": \"New Duster / Showroom\",\n  \"car_model\": \"New Duster / Showroom\",\n  \"available_slots\": [\n    \"10:00\",\n    \"11:00\",\n    \"13:00\",\n    \"14:00\",\n    \"15:00\",\n    \"16:00\",\n    \"17:00\",\n    \"18:00\",\n    \"19:00\",\n    \"20:00\"\n  ]\n}"
+  },
+  "appointment/customer_lookup.php": {
+    "fetchedAt": "2026-08-05T12:21:59.390Z",
+    "status": 200,
+    "url": "/api/v1/appointment/customer_lookup.php",
+    "body": "{\n  \"success\": true,\n  \"found\": true,\n  \"cars\": [\n    {\n      \"id\": 12,\n      \"customer_id\": 12,\n      \"vin\": \"khel1258647965325\",\n      \"name\": \"saqib\",\n      \"car_type\": \"sonata\",\n      \"car_model\": \"2025\",\n      \"franchise_id\": 1,\n      \"agency_id\": \"Al-Wallan\",\n      \"odometer\": \"1\",\n      \"email\": \"tahir.iqbal@unitedsol.net\"\n    }\n  ]\n}",
+    "source": "team-provided"
+  },
+  "appointment/create_customer.php": {
+    "fetchedAt": "2026-08-05T12:21:59.390Z",
+    "status": 200,
+    "url": "/api/v1/appointment/create_customer.php",
+    "body": "{\n  \"success\": true,\n  \"message\": \"Customer created successfully.\",\n  \"customer_id\": 62\n}",
+    "source": "team-provided"
+  },
+  "test_drive/lookup.php": {
+    "fetchedAt": "2026-08-05T12:21:59.390Z",
+    "status": 200,
+    "url": "/api/v1/test_drive/lookup.php",
+    "body": "{\n  \"success\": true,\n  \"count\": 10,\n  \"customer_phone\": \"0582701766\",\n  \"data\": [\n    {\n      \"appointment_id\": 1153,\n      \"status\": \"Booked\",\n      \"last_status\": {\n        \"status_id\": 1,\n        \"status_name\": \"Booked\",\n        \"note\": \"\",\n        \"updated_by\": \"AI_Chatbot\",\n        \"updated_at\": \"2026-07-16 17:35:46\"\n      },\n      \"date\": \"2026-07-26\",\n      \"time\": \"12:00\",\n      \"showroom\": \"معرض رينو الرياض الوعلان\",\n      \"car\": \"New Duster\",\n      \"customer_name\": \"saqib\",\n      \"customer_phone\": \"0582701766\",\n      \"customer_email\": \"\",\n      \"license_number\": \"\",\n      \"booking_confirmed\": true,\n      \"booking_rescheduled\": false,\n      \"booking_cancelled\": false,\n      \"call_status\": \"contacted\"\n    }\n  ]\n}",
+    "source": "team-provided"
+  },
+  "test_drive/get.php": {
+    "fetchedAt": "2026-08-05T12:21:59.390Z",
+    "status": 200,
+    "url": "/api/v1/test_drive/get.php",
+    "body": "{\n  \"success\": true,\n  \"data\": {\n    \"appointment_id\": 152,\n    \"status\": \"Booked\",\n    \"last_status\": {\n      \"status_id\": 1,\n      \"status_name\": \"Booked\",\n      \"note\": \"                            \",\n      \"updated_by\": \"\",\n      \"updated_at\": \"\"\n    },\n    \"date\": \"2024-05-08\",\n    \"time\": \"10:30\",\n    \"showroom\": \"Showroom #2\",\n    \"car\": \"Zeekr 001\",\n    \"customer_name\": \"waleed mohammed\",\n    \"customer_phone\": \"568220000\",\n    \"customer_email\": \"\",\n    \"license_number\": \"\",\n    \"booking_confirmed\": true,\n    \"booking_rescheduled\": false,\n    \"booking_cancelled\": false,\n    \"call_status\": \"contacted\"\n  }\n}",
+    "source": "team-provided"
+  },
+  "test_drive/cancel.php": {
+    "fetchedAt": "2026-08-05T12:21:59.390Z",
+    "status": 200,
+    "url": "/api/v1/test_drive/cancel.php",
+    "body": "{\n  \"success\": true,\n  \"message\": \"Appointment cancelled successfully.\",\n  \"appointment_id\": 152,\n  \"status\": \"Cancelled\",\n  \"booking_confirmed\": false,\n  \"booking_rescheduled\": false,\n  \"booking_cancelled\": true,\n  \"call_status\": \"contacted\"\n}",
+    "source": "team-provided"
   }
 }
