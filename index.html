@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>EMS APIs Tecnext</title>
+    <link rel="icon" type="image/png" href="./favicon.png" />
+    <link rel="apple-touch-icon" href="./favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;600&family=Source+Sans+3:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="locked">
+    <section id="gate" aria-label="Password gate">
+      <form class="gate-card" id="gate-form">
+        <h1>EMS APIs Tecnext</h1>
+        <p>Internal Wallan / TecNext reference. Enter the team password to continue.</p>
+        <label for="gate-password">Password</label>
+        <input
+          id="gate-password"
+          name="password"
+          type="password"
+          autocomplete="current-password"
+          required
+          autofocus
+        />
+        <button type="submit">Open documentation</button>
+        <p class="gate-error" id="gate-error" role="alert"></p>
+      </form>
+    </section>
+
+    <div id="app" hidden>
+      <div class="shell">
+        <aside class="sidebar">
+          <div class="brand">
+            <p class="eyebrow">Wallan · AI Project</p>
+            <h1 id="brand-title">EMS APIs Tecnext</h1>
+          </div>
+          <input
+            class="search"
+            id="search"
+            type="search"
+            placeholder="Filter endpoints…"
+            autocomplete="off"
+          />
+          <nav id="nav" aria-label="Endpoints"></nav>
+        </aside>
+        <main class="main" id="main"></main>
+      </div>
+    </div>
+
+    <script src="./data.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

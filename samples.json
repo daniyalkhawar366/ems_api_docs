@@ -1,0 +1,74 @@
+{
+  "appointment/franchises.php": {
+    "fetchedAt": "2026-08-05T11:42:25.761Z",
+    "status": 200,
+    "url": "/api/v1/appointment/franchises.php?api_key={{api_key}}",
+    "body": "{\n  \"success\": true,\n  \"count\": 6,\n  \"data\": [\n    {\n      \"id\": 1,\n      \"franchise\": \"Hyundai\",\n      \"logo\": \"files/hyundai.png\"\n    },\n    {\n      \"id\": 2,\n      \"franchise\": \"Geely\",\n      \"logo\": \"files/geely.png\"\n    },\n    {\n      \"id\": 3,\n      \"franchise\": \"Genesis\",\n      \"logo\": \"files/genesis_logo.png\"\n    },\n    {\n      \"id\": 5,\n      \"franchise\": \"Renault\",\n      \"logo\": \"files/renault.png\"\n    },\n    {\n      \"id\": 7,\n      \"franchise\": \"Zeekr\",\n      \"logo\": \"\"\n    },\n    {\n      \"id\": 8,\n      \"franchise\": \"Louts\",\n      \"logo\": \"\"\n    }\n  ]\n}"
+  },
+  "appointment/departments.php": {
+    "fetchedAt": "2026-08-05T11:42:26.065Z",
+    "status": 200,
+    "url": "/api/v1/appointment/departments.php?api_key={{api_key}}",
+    "body": "{\n  \"success\": true,\n  \"count\": 2,\n  \"data\": [\n    {\n      \"department_id\": 2,\n      \"department_name\": \"Workshop\"\n    },\n    {\n      \"department_id\": 4,\n      \"department_name\": \"Quick Service\"\n    }\n  ]\n}"
+  },
+  "appointment/branches.php": {
+    "fetchedAt": "2026-08-05T11:42:26.307Z",
+    "status": 200,
+    "url": "/api/v1/appointment/branches.php?api_key={{api_key}}&franchise_id=1&department_id=2",
+    "body": "{\n  \"success\": true,\n  \"count\": 8,\n  \"data\": [\n    {\n      \"br_id\": \"01W\",\n      \"branch_name\": \"Main Workshop\"\n    },\n    {\n      \"br_id\": \"20W\",\n      \"branch_name\": \"Qaseem WS\"\n    },\n    {\n      \"br_id\": \"21W\",\n      \"branch_name\": \"Onaiza WS\"\n    },\n    {\n      \"br_id\": \"30W\",\n      \"branch_name\": \"Hail Workshop\"\n    },\n    {\n      \"br_id\": \"532W\",\n      \"branch_name\": \"Hyundai North Riyadh\"\n    },\n    {\n      \"br_id\": \"66W\",\n      \"branch_name\": \"Commercial WS\"\n    },\n    {\n      \"br_id\": \"82W\",\n      \"branch_name\": \"Jouf Workshop\"\n    },\n    {\n      \"br_id\": \"91W\",\n      \"branch_name\": \"Faisaliah WS\"\n    }\n  ]\n}"
+  },
+  "appointment/service_types.php": {
+    "fetchedAt": "2026-08-05T11:42:26.773Z",
+    "status": 200,
+    "url": "/api/v1/appointment/service_types.php?api_key={{api_key}}",
+    "body": "{\n  \"success\": true,\n  \"data\": [\n    {\n      \"id\": 1,\n      \"service\": \"Repair\"\n    },\n    {\n      \"id\": 2,\n      \"service\": \"PMS\"\n    },\n    {\n      \"id\": 3,\n      \"service\": \"Recall\"\n    }\n  ]\n}"
+  },
+  "appointment/available_slots.php": {
+    "fetchedAt": "2026-08-05T11:42:27.029Z",
+    "status": 200,
+    "url": "/api/v1/appointment/available_slots.php?api_key={{api_key}}&branch=85Q&Type_sel=1&date=2026-08-05",
+    "body": "{\n  \"success\": true,\n  \"data\": {\n    \"date\": \"2026-08-05\",\n    \"branch\": \"85Q\",\n    \"available\": false,\n    \"status_message\": \"No available slots on this date\",\n    \"available_slots\": []\n  }\n}"
+  },
+  "appointment/metadata.php": {
+    "fetchedAt": "2026-08-05T11:42:27.498Z",
+    "status": 200,
+    "url": "/api/v1/appointment/metadata.php",
+    "body": "{\n  \"success\": true,\n  \"data\": {\n    \"campaigns\": [\n      {\n        \"id\": 1,\n        \"description\": \"Service Offer\"\n      }\n    ],\n    \"sources\": [\n      {\n        \"id\": 1,\n        \"source\": \"Phone\"\n      },\n      {\n        \"id\": 2,\n        \"source\": \"SMS\"\n      },\n      {\n        \"id\": 3,\n        \"source\": \"Email\"\n      },\n      {\n        \"id\": 4,\n        \"source\": \"Twitter\"\n      },\n      {\n        \"id\": 5,\n        \"source\": \"Snapchat\"\n      },\n      {\n        \"id\": 6,\n        \"source\": \"Instagram\"\n      },\n      {\n        \"id\": 7,\n        \"source\": \"Facebook\"\n      },\n      {\n        \"id\": 8,\n        \"source\": \"YouTube\"\n      },\n      {\n        \"id\": 9,\n        \"source\": \"Website\"\n      },\n      {\n        \"id\": 10,\n        \"source\": \"VOC\"\n      },\n      {\n        \"id\": 11,\n        \"source\": \"TV\"\n      },\n      {\n        \"id\": 12,\n        \"source\": \"Existing Customers\"\n      },\n      {\n        \"id\": 13,\n        \"source\": \"Influencer\"\n      },\n      {\n        \"id\": 14,\n        \"source\": \"Motory\"\n      },\n      {\n        \"id\": 15,\n        \"source\": \"Moraba\"\n      },\n      {\n        \"id\": 16,\n        \"source\": \"AI Project\"\n      }\n    ]\n  }\n}"
+  },
+  "appointment/car_data.php": {
+    "fetchedAt": "2026-08-05T11:42:27.697Z",
+    "status": 200,
+    "url": "/api/v1/appointment/car_data.php",
+    "body": "{\n  \"success\": true,\n  \"data\": {\n    \"models\": [\n      {\n        \"id\": \"i10\",\n        \"name\": \"i10\"\n      },\n      {\n        \"id\": \"i20\",\n        \"name\": \"i20\"\n      },\n      {\n        \"id\": \"i30\",\n        \"name\": \"i30\"\n      },\n      {\n        \"id\": \"Accent\",\n        \"name\": \"Accent\"\n      },\n      {\n        \"id\": \"i10 Grand\",\n        \"name\": \"i10 Grand\"\n      },\n      {\n        \"id\": \"Celesta\",\n        \"name\": \"Celesta\"\n      },\n      {\n        \"id\": \"Elantra\",\n        \"name\": \"Elantra\"\n      },\n      {\n        \"id\": \"Azera\",\n        \"name\": \"Azera\"\n      },\n      {\n        \"id\": \"Sonata\",\n        \"name\": \"Sonata\"\n      },\n      {\n        \"id\": \"Creta\",\n        \"name\": \"Creta\"\n      },\n      {\n        \"id\": \"Creta Grand\",\n        \"name\": \"Creta Grand\"\n      },\n      {\n        \"id\": \"Kona\",\n        \"name\": \"Kona\"\n      },\n      {\n        \"id\": \"Palisade\",\n        \"name\": \"Palisade\"\n      },\n      {\n        \"id\": \"Santa Fe\",\n        \"name\": \"Santa Fe\"\n      },\n      {\n        \"id\": \"Tucson\",\n        \"name\": \"Tucson\"\n      },\n      {\n        \"id\": \"Venue\",\n        \"name\": \"Venue\"\n      },\n      {\n        \"id\": \"Staria\",\n        \"name\": \"Staria\"\n      },\n      {\n        \"id\": \"Stargazer\",\n        \"name\": \"Stargazer\"\n      },\n      {\n        \"id\": \"Santa Cruz\\r\\n\",\n        \"name\": \"Santa Cruz\\r\\n\"\n      },\n      {\n        \"id\": \"Mufasa\",\n        \"name\": \"Mufasa\"\n      },\n      {\n        \"id\": \"H-1\",\n        \"name\": \"H-1\"\n      },\n      {\n        \"id\": \"veloster\",\n        \"name\": \"veloster\"\n      }\n    ],\n    \"agencies\": [\n      {\n        \"id\": 1,\n        \"name\": \"Al-Wallan\"\n      },\n      {\n        \"id\": 2,\n        \"name\": \"Al-Majdouie\"\n      },\n      {\n        \"id\": 3,\n        \"name\": \"Naghi\"\n      }\n    ]\n  }\n}"
+  },
+  "test_drive/brands.php": {
+    "fetchedAt": "2026-08-05T11:42:28.124Z",
+    "status": 200,
+    "url": "/api/v1/test_drive/brands.php?api_key={{api_key}}",
+    "body": "{\n  \"success\": true,\n  \"count\": 9,\n  \"data\": [\n    {\n      \"id\": 1,\n      \"brand_name\": \"Hyundai\"\n    },\n    {\n      \"id\": 2,\n      \"brand_name\": \"Geely\"\n    },\n    {\n      \"id\": 3,\n      \"brand_name\": \"Genesis\"\n    },\n    {\n      \"id\": 4,\n      \"brand_name\": \"Al Aslee\"\n    },\n    {\n      \"id\": 5,\n      \"brand_name\": \"Renault\"\n    },\n    {\n      \"id\": 6,\n      \"brand_name\": \"Multi-Brand\"\n    },\n    {\n      \"id\": 7,\n      \"brand_name\": \"Zeekr\"\n    },\n    {\n      \"id\": 8,\n      \"brand_name\": \"Louts\"\n    },\n    {\n      \"id\": 9,\n      \"brand_name\": \"Training\"\n    }\n  ]\n}"
+  },
+  "test_drive/cities.php": {
+    "fetchedAt": "2026-08-05T11:42:28.373Z",
+    "status": 200,
+    "url": "/api/v1/test_drive/cities.php?api_key={{api_key}}&brand_id=5",
+    "body": "{\n  \"success\": true,\n  \"count\": 3,\n  \"data\": [\n    {\n      \"id\": 7,\n      \"city_name\": \"Riyadh\"\n    },\n    {\n      \"id\": 9,\n      \"city_name\": \"Damam\"\n    },\n    {\n      \"id\": 10,\n      \"city_name\": \"Geddah\"\n    }\n  ]\n}"
+  },
+  "test_drive/showrooms.php": {
+    "fetchedAt": "2026-08-05T11:42:28.584Z",
+    "status": 200,
+    "url": "/api/v1/test_drive/showrooms.php?api_key={{api_key}}&city_id=7",
+    "body": "{\n  \"success\": true,\n  \"count\": 1,\n  \"data\": [\n    {\n      \"id\": 6,\n      \"name\": \"معرض رينو الرياض الوعلان\",\n      \"showroom_name\": \"معرض رينو الرياض الوعلان\",\n      \"branch_code\": \"معرض رينو الرياض الوعلان\",\n      \"location_url\": \"https://maps.app.goo.gl/nECrRGqm1dpkrGyM6\"\n    }\n  ]\n}"
+  },
+  "test_drive/cars.php": {
+    "fetchedAt": "2026-08-05T11:42:28.827Z",
+    "status": 200,
+    "url": "/api/v1/test_drive/cars.php?api_key={{api_key}}&brand_id=5&showroom_id=6",
+    "body": "{\n  \"success\": true,\n  \"brand_name\": \"Renault\",\n  \"location_types\": [\n    \"showroom\",\n    \"home\"\n  ],\n  \"cars_count\": 7,\n  \"cars\": [\n    {\n      \"id\": 45,\n      \"name\": \"New Duster / Showroom\",\n      \"car_model\": \"New Duster / Showroom\",\n      \"model_code\": \"NEW DUSTER / SHOWROOM\",\n      \"location_types\": [\n        \"showroom\"\n      ]\n    },\n    {\n      \"id\": 48,\n      \"name\": \"New Duster / Home\",\n      \"car_model\": \"New Duster / Home\",\n      \"model_code\": \"NEW DUSTER / HOME\",\n      \"location_types\": [\n        \"home\"\n      ]\n    },\n    {\n      \"id\": 51,\n      \"name\": \"New Koleos / Showroom\",\n      \"car_model\": \"New Koleos / Showroom\",\n      \"model_code\": \"NEW KOLEOS / SHOWROOM\",\n      \"location_types\": [\n        \"showroom\"\n      ]\n    },\n    {\n      \"id\": 54,\n      \"name\": \"New Koleos / Home\",\n      \"car_model\": \"New Koleos / Home\",\n      \"model_code\": \"NEW KOLEOS / HOME\",\n      \"location_types\": [\n        \"home\"\n      ]\n    },\n    {\n      \"id\": 72,\n      \"name\": \"ARKANA\",\n      \"car_model\": \"ARKANA\",\n      \"model_code\": \"ARKANA\",\n      \"location_types\": [\n        \"showroom\",\n        \"home\"\n      ]\n    },\n    {\n      \"id\": 79,\n      \"name\": \"DUSTER\",\n      \"car_model\": \"DUSTER\",\n      \"model_code\": \"DUSTER\",\n      \"location_types\": [\n        \"showroom\",\n        \"home\"\n      ]\n    },\n    {\n      \"id\": 86,\n      \"name\": \"Grand Koleos Techno\",\n      \"car_model\": \"Grand Koleos Techno\",\n      \"model_code\": \"GRAND KOLEOS TECHNO\",\n      \"location_types\": [\n        \"showroom\",\n        \"home\"\n      ]\n    }\n  ]\n}"
+  },
+  "test_drive/available_slots.php": {
+    "fetchedAt": "2026-08-05T11:42:29.040Z",
+    "status": 200,
+    "url": "/api/v1/test_drive/available_slots.php?api_key={{api_key}}&showroom_id=6&car_model=New+Duster+%2F+Showroom&date=2026-08-05&brand_id=5",
+    "body": "{\n  \"success\": true,\n  \"date\": \"2026-08-05\",\n  \"showroom_id\": 6,\n  \"is_holiday\": false,\n  \"holiday_name\": \"\",\n  \"is_dayoff\": false,\n  \"capacity\": 10,\n  \"booked\": 0,\n  \"total_slots\": 10,\n  \"car\": \"New Duster / Showroom\",\n  \"car_model\": \"New Duster / Showroom\",\n  \"available_slots\": [\n    \"10:00\",\n    \"11:00\",\n    \"13:00\",\n    \"14:00\",\n    \"15:00\",\n    \"16:00\",\n    \"17:00\",\n    \"18:00\",\n    \"19:00\",\n    \"20:00\"\n  ]\n}"
+  }
+}

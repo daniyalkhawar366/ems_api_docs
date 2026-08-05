@@ -1,0 +1,1598 @@
+{
+  "info": {
+    "name": "EMS API",
+    "description": "Postman collection for the EMS Appointment & Test Drive API (Wallan Group · AI Project).\n\nBase URL: https://ems.wallan.com/api/v1\nAuth: api_key sent in the POST body (recommended) or as a ?api_key= URL parameter.\n\nSynced with https://ems.wallan.com/api/v1/appointment/Documentation.php (21 endpoints, docs last updated July 29, 2026).\n\nCHANGES IN THIS REVISION\n• Added 19. TD Customer Lookup (test_drive/lookup.php)\n• Added 20. TD Get Single Booking (test_drive/get.php)\n• Added 21. TD Cancel Booking (test_drive/cancel.php)\n• 17. TD Slots: parameters changed — showroom_id + car_model + date are now required, brand_id is now optional (defaults to 1 / Hyundai)\n• 18. TD Book: added optional customer_email and license_number; documented 409 duplicate-booking and slot-unavailable errors\n• 16. TD Cars: documented per-car Renault location rules (/ Showroom and / Home model suffixes)\n• Outbound status flags (booking_confirmed, booking_rescheduled, booking_cancelled, call_status) documented on booking/cancel/callback responses\n• Saved example responses attached to key endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Booking Flow",
+      "item": [
+        {
+          "name": "01. Get Franchises",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/appointment/franchises.php?api_key={{api_key}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "appointment",
+                "franchises.php"
+              ],
+              "query": [
+                {
+                  "key": "api_key",
+                  "value": "{{api_key}}",
+                  "description": "Your API Key."
+                }
+              ]
+            },
+            "description": "Retrieves list of active vehicle brands."
+          },
+          "response": []
+        },
+        {
+          "name": "02. Get Departments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/appointment/departments.php?api_key={{api_key}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "appointment",
+                "departments.php"
+              ],
+              "query": [
+                {
+                  "key": "api_key",
+                  "value": "{{api_key}}",
+                  "description": "Your API Key."
+                }
+              ]
+            },
+            "description": "Retrieves internal departments (Sales, Service, etc)."
+          },
+          "response": []
+        },
+        {
+          "name": "03. Get Filtered Branches",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/appointment/branches.php?api_key={{api_key}}&franchise_id=&department_id=",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "appointment",
+                "branches.php"
+              ],
+              "query": [
+                {
+                  "key": "api_key",
+                  "value": "{{api_key}}",
+                  "description": "Your API Key."
+                },
+                {
+                  "key": "franchise_id",
+                  "value": "",
+                  "description": "ID from Franchises API."
+                },
+                {
+                  "key": "department_id",
+                  "value": "",
+                  "description": "ID from Departments API."
+                }
+              ]
+            },
+            "description": "Returns branches based on franchise and department."
+          },
+          "response": []
+        },
+        {
+          "name": "04. Get Service Types",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/appointment/service_types.php?api_key={{api_key}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "appointment",
+                "service_types.php"
+              ],
+              "query": [
+                {
+                  "key": "api_key",
+                  "value": "{{api_key}}",
+                  "description": "Your API Key."
+                }
+              ]
+            },
+            "description": "Retrieves service categories (General, PMS, etc)."
+          },
+          "response": []
+        },
+        {
+          "name": "05. Get Available Slots",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/appointment/available_slots.php?api_key={{api_key}}&branch=85Q&Type_sel=&date=",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "appointment",
+                "available_slots.php"
+              ],
+              "query": [
+                {
+                  "key": "api_key",
+                  "value": "{{api_key}}",
+                  "description": "Your API Key."
+                },
+                {
+                  "key": "branch",
+                  "value": "85Q",
+                  "description": "Branch ID (e.g. 85Q)."
+                },
+                {
+                  "key": "Type_sel",
+                  "value": "",
+                  "description": "Service Type ID."
+                },
+                {
+                  "key": "date",
+                  "value": "",
+                  "description": "YYYY-MM-DD (Default: today)."
+                }
+              ]
+            },
+            "description": "Retrieves available time slots and Advisor IDs. Returns sa_id required for the final booking step."
+          },
+          "response": []
+        },
+        {
+          "name": "06. Customer Lookup",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "api_key",
+                  "value": "{{api_key}}",
+                  "type": "text",
+                  "description": "Yes | Your API Key."
+                },
+                {
+                  "key": "phone",
+                  "value": "",
+                  "type": "text",
+                  "description": "Yes | Customer mobile number."
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/appointment/customer_lookup.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "appointment",
+                "customer_lookup.php"
+              ]
+            },
+            "description": "Lookup customer and car data by phone number. If found:false, use Create Customer."
+          },
+          "response": []
+        },
+        {
+          "name": "07. Create Customer & Vehicle",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "api_key",
+                  "value": "{{api_key}}",
+                  "type": "text",
+                  "description": "Yes | Your API Key."
+                },
+                {
+                  "key": "customer_name",
+                  "value": "",
+                  "type": "text",
+                  "description": "Yes | Full name."
+                },
+                {
+                  "key": "customer_phone",
+                  "value": "",
+                  "type": "text",
+                  "description": "Yes | Mobile number."
+                },
+                {
+                  "key": "customer_plate",
+                  "value": "",
+                  "type": "text",
+                  "description": "Yes | VIN or Plate."
+                },
+                {
+                  "key": "car_type",
+                  "value": "",
+                  "type": "text",
+                  "description": "Yes | Model Name."
+                },
+                {
+                  "key": "car_model",
+                  "value": "2024",
+                  "type": "text",
+                  "description": "Yes | Year (e.g. 2024)."
+                },
+                {
+                  "key": "age_select",
+                  "value": "",
+                  "type": "text",
+                  "description": "Yes | Agency ID."
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/appointment/create_customer.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "appointment",
+                "create_customer.php"
+              ]
+            },
+            "description": "Registers a new customer and vehicle record. Returns a customer_id upon success."
+          },
+          "response": []
+        },
+        {
+          "name": "08. Car Models & Agencies",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "api_key",
+                  "value": "{{api_key}}",
+                  "type": "text",
+                  "description": "Yes | Your API Key."
+                },
+                {
+                  "key": "franchise_id",
+                  "value": "",
+                  "type": "text",
+                  "description": "Yes | Franchise ID."
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/appointment/car_data.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "appointment",
+                "car_data.php"
+              ]
+            },
+            "description": "Retrieves valid models and agencies for a brand."
+          },
+          "response": []
+        },
+        {
+          "name": "09. Form Metadata",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "api_key",
+                  "value": "{{api_key}}",
+                  "type": "text",
+                  "description": "Yes | Your API Key."
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/appointment/metadata.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "appointment",
+                "metadata.php"
+              ]
+            },
+            "description": "Retrieves campaigns, sources, and other global data."
+          },
+          "response": []
+        },
+        {
+          "name": "10. Book Appointment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "api_key",
+                  "value": "{{api_key}}",
+                  "type": "text",
+                  "description": "Yes | Your API Key."
+                },
+                {
+                  "key": "customer_id",
+                  "value": "",
+                  "type": "text",
+                  "description": "Yes | Internal ID."
+                },
+                {
+                  "key": "sa_id",
+                  "value": "",
+                  "type": "text",
+                  "description": "Yes | Advisor ID (from Slots)."
+                },
+                {
+                  "key": "time",
+                  "value": "08:30",
+                  "type": "text",
+                  "description": "Yes | Slot time (e.g. 08:30)."
+                },
+                {
+                  "key": "date",
+                  "value": "",
+                  "type": "text",
+                  "description": "Yes | YYYY-MM-DD."
+                },
+                {
+                  "key": "appointment_type",
+                  "value": "",
+                  "type": "text",
+                  "description": "Yes | Service Type ID."
+                },
+                {
+                  "key": "comment",
+                  "value": "",
+                  "type": "text",
+                  "description": "No | Optional note/remark.",
+                  "disabled": true
+                },
+                {
+                  "key": "car_odometer",
+                  "value": "",
+                  "type": "text",
+                  "description": "No | Current vehicle mileage.",
+                  "disabled": true
+                },
+                {
+                  "key": "email",
+                  "value": "",
+                  "type": "text",
+                  "description": "No | Customer email address.",
+                  "disabled": true
+                },
+                {
+                  "key": "age_select",
+                  "value": "",
+                  "type": "text",
+                  "description": "No | Agency ID (to update car agency).",
+                  "disabled": true
+                },
+                {
+                  "key": "campaign",
+                  "value": "",
+                  "type": "text",
+                  "description": "No | Campaign ID (from Metadata API).",
+                  "disabled": true
+                },
+                {
+                  "key": "activity",
+                  "value": "",
+                  "type": "text",
+                  "description": "No | Activity ID.",
+                  "disabled": true
+                },
+                {
+                  "key": "leadtime",
+                  "value": "",
+                  "type": "text",
+                  "description": "No | Normal | Customer Choice after 7 days | Delay due to workshop load.",
+                  "disabled": true
+                },
+                {
+                  "key": "rating",
+                  "value": "",
+                  "type": "text",
+                  "description": "No | 0 (Not visited before) or 1-10 (Rating).",
+                  "disabled": true
+                },
+                {
+                  "key": "reason",
+                  "value": "",
+                  "type": "text",
+                  "description": "No | Required if rating < 5: First Time, Satisfy, Staff Attitude, Price, Service, Lack Information.",
+                  "disabled": true
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/appointment/book.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "appointment",
+                "book.php"
+              ]
+            },
+            "description": "Final step to submit a booking.\n\nBusiness rules:\n• The provided sa_id is preserved for advisor attribution.\n• If rating is less than 5 you MUST provide a valid reason.\n• All responses include outbound status flags: booking_confirmed, booking_rescheduled, booking_cancelled, call_status.\n• All API bookings are tagged with source 'AI Project' (ID 16)."
+          },
+          "response": [
+            {
+              "name": "Success (200 OK)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "api_key",
+                      "value": "{{api_key}}",
+                      "type": "text",
+                      "description": "Yes | Your API Key."
+                    },
+                    {
+                      "key": "customer_id",
+                      "value": "",
+                      "type": "text",
+                      "description": "Yes | Internal ID."
+                    },
+                    {
+                      "key": "sa_id",
+                      "value": "",
+                      "type": "text",
+                      "description": "Yes | Advisor ID (from Slots)."
+                    },
+                    {
+                      "key": "time",
+                      "value": "08:30",
+                      "type": "text",
+                      "description": "Yes | Slot time (e.g. 08:30)."
+                    },
+                    {
+                      "key": "date",
+                      "value": "",
+                      "type": "text",
+                      "description": "Yes | YYYY-MM-DD."
+                    },
+                    {
+                      "key": "appointment_type",
+                      "value": "",
+                      "type": "text",
+                      "description": "Yes | Service Type ID."
+                    },
+                    {
+                      "key": "comment",
+                      "value": "",
+                      "type": "text",
+                      "description": "No | Optional note/remark.",
+                      "disabled": true
+                    },
+                    {
+                      "key": "car_odometer",
+                      "value": "",
+                      "type": "text",
+                      "description": "No | Current vehicle mileage.",
+                      "disabled": true
+                    },
+                    {
+                      "key": "email",
+                      "value": "",
+                      "type": "text",
+                      "description": "No | Customer email address.",
+                      "disabled": true
+                    },
+                    {
+                      "key": "age_select",
+                      "value": "",
+                      "type": "text",
+                      "description": "No | Agency ID (to update car agency).",
+                      "disabled": true
+                    },
+                    {
+                      "key": "campaign",
+                      "value": "",
+                      "type": "text",
+                      "description": "No | Campaign ID (from Metadata API).",
+                      "disabled": true
+                    },
+                    {
+                      "key": "activity",
+                      "value": "",
+                      "type": "text",
+                      "description": "No | Activity ID.",
+                      "disabled": true
+                    },
+                    {
+                      "key": "leadtime",
+                      "value": "",
+                      "type": "text",
+                      "description": "No | Normal | Customer Choice after 7 days | Delay due to workshop load.",
+                      "disabled": true
+                    },
+                    {
+                      "key": "rating",
+                      "value": "",
+                      "type": "text",
+                      "description": "No | 0 (Not visited before) or 1-10 (Rating).",
+                      "disabled": true
+                    },
+                    {
+                      "key": "reason",
+                      "value": "",
+                      "type": "text",
+                      "description": "No | Required if rating < 5: First Time, Satisfy, Staff Attitude, Price, Service, Lack Information.",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{base_url}}/appointment/book.php",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "appointment",
+                    "book.php"
+                  ]
+                },
+                "description": "Final step to submit a booking.\n\nBusiness rules:\n• The provided sa_id is preserved for advisor attribution.\n• If rating is less than 5 you MUST provide a valid reason.\n• All responses include outbound status flags: booking_confirmed, booking_rescheduled, booking_cancelled, call_status.\n• All API bookings are tagged with source 'AI Project' (ID 16)."
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"The appointment has been booked successfully\",\n    \"appointment_id\": 1042,\n    \"booking_confirmed\": true,\n    \"booking_rescheduled\": false,\n    \"booking_cancelled\": false,\n    \"call_status\": \"not_contacted\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "11. Cancel Appointment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "api_key",
+                  "value": "{{api_key}}",
+                  "type": "text",
+                  "description": "Yes | Your API Key."
+                },
+                {
+                  "key": "appointment_id",
+                  "value": "",
+                  "type": "text",
+                  "description": "Yes | The ID of the appointment to cancel."
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/appointment/cancel.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "appointment",
+                "cancel.php"
+              ]
+            },
+            "description": "Cancels an existing appointment using its ID.\n\nAction: marks the appointment as cancelled = 'true' and adds a cancellation entry to the status history."
+          },
+          "response": [
+            {
+              "name": "Success (200 OK)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "api_key",
+                      "value": "{{api_key}}",
+                      "type": "text",
+                      "description": "Yes | Your API Key."
+                    },
+                    {
+                      "key": "appointment_id",
+                      "value": "",
+                      "type": "text",
+                      "description": "Yes | The ID of the appointment to cancel."
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{base_url}}/appointment/cancel.php",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "appointment",
+                    "cancel.php"
+                  ]
+                },
+                "description": "Cancels an existing appointment using its ID.\n\nAction: marks the appointment as cancelled = 'true' and adds a cancellation entry to the status history."
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Appointment cancelled successfully.\",\n    \"appointment_id\": 1042,\n    \"booking_confirmed\": false,\n    \"booking_rescheduled\": false,\n    \"booking_cancelled\": true,\n    \"call_status\": \"cancelled\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Call Back",
+      "item": [
+        {
+          "name": "12. Add Call Back Request",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "api_key",
+                  "value": "{{api_key}}",
+                  "type": "text",
+                  "description": "Yes | Your API Key."
+                },
+                {
+                  "key": "full_name",
+                  "value": "",
+                  "type": "text",
+                  "description": "Yes | Customer's full name."
+                },
+                {
+                  "key": "email",
+                  "value": "",
+                  "type": "text",
+                  "description": "Yes | Customer's email address."
+                },
+                {
+                  "key": "telephone",
+                  "value": "",
+                  "type": "text",
+                  "description": "Yes | Customer's phone/telephone number."
+                },
+                {
+                  "key": "car_number_plate",
+                  "value": "",
+                  "type": "text",
+                  "description": "Yes | Vehicle plate number (max 10 chars)."
+                },
+                {
+                  "key": "preferred_date",
+                  "value": "",
+                  "type": "text",
+                  "description": "Yes | Preferred callback date (YYYY-MM-DD)."
+                },
+                {
+                  "key": "preferred_time",
+                  "value": "",
+                  "type": "text",
+                  "description": "Yes | Preferred callback time (HH:MM:SS or HH:MM)."
+                },
+                {
+                  "key": "comments",
+                  "value": "",
+                  "type": "text",
+                  "description": "No | Optional comments/notes.",
+                  "disabled": true
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/call_back/add.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "call_back",
+                "add.php"
+              ]
+            },
+            "description": "Adds a new customer call back request to the database.\n\nAction: inserts a new record into the call_back table and returns outbound call status flags."
+          },
+          "response": [
+            {
+              "name": "Success (200 OK)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "api_key",
+                      "value": "{{api_key}}",
+                      "type": "text",
+                      "description": "Yes | Your API Key."
+                    },
+                    {
+                      "key": "full_name",
+                      "value": "",
+                      "type": "text",
+                      "description": "Yes | Customer's full name."
+                    },
+                    {
+                      "key": "email",
+                      "value": "",
+                      "type": "text",
+                      "description": "Yes | Customer's email address."
+                    },
+                    {
+                      "key": "telephone",
+                      "value": "",
+                      "type": "text",
+                      "description": "Yes | Customer's phone/telephone number."
+                    },
+                    {
+                      "key": "car_number_plate",
+                      "value": "",
+                      "type": "text",
+                      "description": "Yes | Vehicle plate number (max 10 chars)."
+                    },
+                    {
+                      "key": "preferred_date",
+                      "value": "",
+                      "type": "text",
+                      "description": "Yes | Preferred callback date (YYYY-MM-DD)."
+                    },
+                    {
+                      "key": "preferred_time",
+                      "value": "",
+                      "type": "text",
+                      "description": "Yes | Preferred callback time (HH:MM:SS or HH:MM)."
+                    },
+                    {
+                      "key": "comments",
+                      "value": "",
+                      "type": "text",
+                      "description": "No | Optional comments/notes.",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{base_url}}/call_back/add.php",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "call_back",
+                    "add.php"
+                  ]
+                },
+                "description": "Adds a new customer call back request to the database.\n\nAction: inserts a new record into the call_back table and returns outbound call status flags."
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Call back request added successfully.\",\n    \"booking_confirmed\": true,\n    \"booking_rescheduled\": false,\n    \"booking_cancelled\": false,\n    \"call_status\": \"not_contacted\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Test Drive",
+      "item": [
+        {
+          "name": "13. TD Brands",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/test_drive/brands.php?api_key={{api_key}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "test_drive",
+                "brands.php"
+              ],
+              "query": [
+                {
+                  "key": "api_key",
+                  "value": "{{api_key}}",
+                  "description": "Your API Key."
+                }
+              ]
+            },
+            "description": "Retrieves all brands available for test drives."
+          },
+          "response": []
+        },
+        {
+          "name": "14. TD Cities",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/test_drive/cities.php?api_key={{api_key}}&brand_id=",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "test_drive",
+                "cities.php"
+              ],
+              "query": [
+                {
+                  "key": "api_key",
+                  "value": "{{api_key}}",
+                  "description": "Your API Key."
+                },
+                {
+                  "key": "brand_id",
+                  "value": "",
+                  "description": "Brand (Franchise) ID."
+                }
+              ]
+            },
+            "description": "Retrieves cities configured for a specific brand."
+          },
+          "response": []
+        },
+        {
+          "name": "15. TD Showrooms",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/test_drive/showrooms.php?api_key={{api_key}}&city_id=",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "test_drive",
+                "showrooms.php"
+              ],
+              "query": [
+                {
+                  "key": "api_key",
+                  "value": "{{api_key}}",
+                  "description": "Your API Key."
+                },
+                {
+                  "key": "city_id",
+                  "value": "",
+                  "description": "City ID."
+                }
+              ]
+            },
+            "description": "Retrieves showrooms available in a specific city."
+          },
+          "response": []
+        },
+        {
+          "name": "16. TD Cars & Locations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/test_drive/cars.php?api_key={{api_key}}&brand_id=&showroom_id=",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "test_drive",
+                "cars.php"
+              ],
+              "query": [
+                {
+                  "key": "api_key",
+                  "value": "{{api_key}}",
+                  "description": "Your API Key."
+                },
+                {
+                  "key": "brand_id",
+                  "value": "",
+                  "description": "Brand (Franchise) ID."
+                },
+                {
+                  "key": "showroom_id",
+                  "value": "",
+                  "description": "Showroom ID."
+                }
+              ]
+            },
+            "description": "Retrieves cars and location booking types (showroom / home) for the brand + showroom.\n\nRenault per-car location rules:\n• Models containing '/ Showroom' → restricted to [\"showroom\"] only.\n• Models containing '/ Home' → restricted to [\"home\"] only.\n• Models with neither suffix → support both [\"showroom\", \"home\"].\n• All other brands → return [\"showroom\"] only."
+          },
+          "response": []
+        },
+        {
+          "name": "17. TD Slots",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/test_drive/available_slots.php?api_key={{api_key}}&showroom_id=&car_model=&date=&brand_id=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "test_drive",
+                "available_slots.php"
+              ],
+              "query": [
+                {
+                  "key": "api_key",
+                  "value": "{{api_key}}",
+                  "description": "Yes | Your API Key."
+                },
+                {
+                  "key": "showroom_id",
+                  "value": "",
+                  "description": "Yes | Showroom ID (alias: showroom)."
+                },
+                {
+                  "key": "car_model",
+                  "value": "",
+                  "description": "Yes | Vehicle model name (aliases: car, model_code)."
+                },
+                {
+                  "key": "date",
+                  "value": "",
+                  "description": "Yes | Appointment date (YYYY-MM-DD)."
+                },
+                {
+                  "key": "brand_id",
+                  "value": "1",
+                  "description": "No | Brand (Franchise) ID. Default: 1 (Hyundai)."
+                }
+              ]
+            },
+            "description": "Retrieves all available test drive time slots for a showroom, vehicle and date.\n\nCHANGED: car_model is now required and brand_id is now optional (previously brand_id + showroom_id + date).\n\nReturns available_slots as a simple array of 24-hour time strings (e.g. [\"09:00\", \"10:00\", \"16:00\"]) specific to the requested vehicle, showroom and date."
+          },
+          "response": []
+        },
+        {
+          "name": "18. TD Book Appointment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "api_key",
+                  "value": "{{api_key}}",
+                  "type": "text",
+                  "description": "Yes | Your API Key."
+                },
+                {
+                  "key": "customer_phone",
+                  "value": "",
+                  "type": "text",
+                  "description": "Yes | Customer phone number."
+                },
+                {
+                  "key": "customer_name",
+                  "value": "",
+                  "type": "text",
+                  "description": "Yes | Customer name."
+                },
+                {
+                  "key": "car",
+                  "value": "",
+                  "type": "text",
+                  "description": "Yes | Selected vehicle model name."
+                },
+                {
+                  "key": "showroom",
+                  "value": "",
+                  "type": "text",
+                  "description": "Yes | Showroom ID."
+                },
+                {
+                  "key": "date",
+                  "value": "",
+                  "type": "text",
+                  "description": "Yes | Appointment date (YYYY-MM-DD)."
+                },
+                {
+                  "key": "time",
+                  "value": "",
+                  "type": "text",
+                  "description": "Yes | Appointment time (HH:MM)."
+                },
+                {
+                  "key": "location_type",
+                  "value": "showroom",
+                  "type": "text",
+                  "description": "Yes | showroom (default) or home. Home ONLY for Renault."
+                },
+                {
+                  "key": "home_location_url",
+                  "value": "",
+                  "type": "text",
+                  "description": "No | Customer location map link (for home type).",
+                  "disabled": true
+                },
+                {
+                  "key": "location_token",
+                  "value": "",
+                  "type": "text",
+                  "description": "No | Unique location token (auto-generated if empty).",
+                  "disabled": true
+                },
+                {
+                  "key": "customer_note",
+                  "value": "",
+                  "type": "text",
+                  "description": "No | Optional comments/notes.",
+                  "disabled": true
+                },
+                {
+                  "key": "customer_email",
+                  "value": "",
+                  "type": "text",
+                  "description": "No | Optional customer email address.",
+                  "disabled": true
+                },
+                {
+                  "key": "license_number",
+                  "value": "",
+                  "type": "text",
+                  "description": "No | Optional driver license or Iqama / National ID number.",
+                  "disabled": true
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/test_drive/book.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "test_drive",
+                "book.php"
+              ]
+            },
+            "description": "Final step to submit a test drive booking.\n\nBusiness rules:\n• location_type=home is ONLY allowed for the Renault brand; using it for another brand returns 400.\n• Duplicate rejection: returns 409 Conflict with error_code 'already_booked' plus existing_appointment_id if the phone number already has an active upcoming booking.\n• Slot unavailable: returns 409 Conflict with error_code 'slot_unavailable' if the slot is already reserved.\n\ncall_status values:\n• 'contacted' — booking/request completed successfully, or the customer was reached.\n• 'not_contacted' — pending call schedule / customer not yet contacted.\n• 'failed' — any failure, error or unsuccessful operation."
+          },
+          "response": [
+            {
+              "name": "Success (200 OK)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "api_key",
+                      "value": "{{api_key}}",
+                      "type": "text",
+                      "description": "Yes | Your API Key."
+                    },
+                    {
+                      "key": "customer_phone",
+                      "value": "",
+                      "type": "text",
+                      "description": "Yes | Customer phone number."
+                    },
+                    {
+                      "key": "customer_name",
+                      "value": "",
+                      "type": "text",
+                      "description": "Yes | Customer name."
+                    },
+                    {
+                      "key": "car",
+                      "value": "",
+                      "type": "text",
+                      "description": "Yes | Selected vehicle model name."
+                    },
+                    {
+                      "key": "showroom",
+                      "value": "",
+                      "type": "text",
+                      "description": "Yes | Showroom ID."
+                    },
+                    {
+                      "key": "date",
+                      "value": "",
+                      "type": "text",
+                      "description": "Yes | Appointment date (YYYY-MM-DD)."
+                    },
+                    {
+                      "key": "time",
+                      "value": "",
+                      "type": "text",
+                      "description": "Yes | Appointment time (HH:MM)."
+                    },
+                    {
+                      "key": "location_type",
+                      "value": "showroom",
+                      "type": "text",
+                      "description": "Yes | showroom (default) or home. Home ONLY for Renault."
+                    },
+                    {
+                      "key": "home_location_url",
+                      "value": "",
+                      "type": "text",
+                      "description": "No | Customer location map link (for home type).",
+                      "disabled": true
+                    },
+                    {
+                      "key": "location_token",
+                      "value": "",
+                      "type": "text",
+                      "description": "No | Unique location token (auto-generated if empty).",
+                      "disabled": true
+                    },
+                    {
+                      "key": "customer_note",
+                      "value": "",
+                      "type": "text",
+                      "description": "No | Optional comments/notes.",
+                      "disabled": true
+                    },
+                    {
+                      "key": "customer_email",
+                      "value": "",
+                      "type": "text",
+                      "description": "No | Optional customer email address.",
+                      "disabled": true
+                    },
+                    {
+                      "key": "license_number",
+                      "value": "",
+                      "type": "text",
+                      "description": "No | Optional driver license or Iqama / National ID number.",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{base_url}}/test_drive/book.php",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "test_drive",
+                    "book.php"
+                  ]
+                },
+                "description": "Final step to submit a test drive booking.\n\nBusiness rules:\n• location_type=home is ONLY allowed for the Renault brand; using it for another brand returns 400.\n• Duplicate rejection: returns 409 Conflict with error_code 'already_booked' plus existing_appointment_id if the phone number already has an active upcoming booking.\n• Slot unavailable: returns 409 Conflict with error_code 'slot_unavailable' if the slot is already reserved.\n\ncall_status values:\n• 'contacted' — booking/request completed successfully, or the customer was reached.\n• 'not_contacted' — pending call schedule / customer not yet contacted.\n• 'failed' — any failure, error or unsuccessful operation."
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Test drive appointment booked successfully.\",\n    \"appointment_id\": 1042,\n    \"status\": \"Booked\",\n    \"date\": \"2026-08-01\",\n    \"time\": \"10:00\",\n    \"showroom\": \"Hyundai Khurais Showroom\",\n    \"showroom_name\": \"Hyundai Khurais Showroom\",\n    \"showroom_location\": \"https://maps.google.com/...\",\n    \"location_url\": \"https://maps.google.com/...\",\n    \"car_model\": \"TUCSON\",\n    \"car\": \"TUCSON\",\n    \"customer_name\": \"Faisal Al-Otaibi\",\n    \"customer_phone\": \"0555630708\",\n    \"customer_email\": \"faisal@example.com\",\n    \"license_number\": \"1098765432\",\n    \"booking_confirmed\": true,\n    \"booking_rescheduled\": false,\n    \"booking_cancelled\": false,\n    \"call_status\": \"contacted\"\n}"
+            },
+            {
+              "name": "Already Booked (409 Conflict)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "api_key",
+                      "value": "{{api_key}}",
+                      "type": "text",
+                      "description": "Yes | Your API Key."
+                    },
+                    {
+                      "key": "customer_phone",
+                      "value": "",
+                      "type": "text",
+                      "description": "Yes | Customer phone number."
+                    },
+                    {
+                      "key": "customer_name",
+                      "value": "",
+                      "type": "text",
+                      "description": "Yes | Customer name."
+                    },
+                    {
+                      "key": "car",
+                      "value": "",
+                      "type": "text",
+                      "description": "Yes | Selected vehicle model name."
+                    },
+                    {
+                      "key": "showroom",
+                      "value": "",
+                      "type": "text",
+                      "description": "Yes | Showroom ID."
+                    },
+                    {
+                      "key": "date",
+                      "value": "",
+                      "type": "text",
+                      "description": "Yes | Appointment date (YYYY-MM-DD)."
+                    },
+                    {
+                      "key": "time",
+                      "value": "",
+                      "type": "text",
+                      "description": "Yes | Appointment time (HH:MM)."
+                    },
+                    {
+                      "key": "location_type",
+                      "value": "showroom",
+                      "type": "text",
+                      "description": "Yes | showroom (default) or home. Home ONLY for Renault."
+                    },
+                    {
+                      "key": "home_location_url",
+                      "value": "",
+                      "type": "text",
+                      "description": "No | Customer location map link (for home type).",
+                      "disabled": true
+                    },
+                    {
+                      "key": "location_token",
+                      "value": "",
+                      "type": "text",
+                      "description": "No | Unique location token (auto-generated if empty).",
+                      "disabled": true
+                    },
+                    {
+                      "key": "customer_note",
+                      "value": "",
+                      "type": "text",
+                      "description": "No | Optional comments/notes.",
+                      "disabled": true
+                    },
+                    {
+                      "key": "customer_email",
+                      "value": "",
+                      "type": "text",
+                      "description": "No | Optional customer email address.",
+                      "disabled": true
+                    },
+                    {
+                      "key": "license_number",
+                      "value": "",
+                      "type": "text",
+                      "description": "No | Optional driver license or Iqama / National ID number.",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{base_url}}/test_drive/book.php",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "test_drive",
+                    "book.php"
+                  ]
+                },
+                "description": "Final step to submit a test drive booking.\n\nBusiness rules:\n• location_type=home is ONLY allowed for the Renault brand; using it for another brand returns 400.\n• Duplicate rejection: returns 409 Conflict with error_code 'already_booked' plus existing_appointment_id if the phone number already has an active upcoming booking.\n• Slot unavailable: returns 409 Conflict with error_code 'slot_unavailable' if the slot is already reserved.\n\ncall_status values:\n• 'contacted' — booking/request completed successfully, or the customer was reached.\n• 'not_contacted' — pending call schedule / customer not yet contacted.\n• 'failed' — any failure, error or unsuccessful operation."
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": false,\n    \"already_booked\": true,\n    \"existing_appointment_id\": 1042,\n    \"error_code\": \"already_booked\",\n    \"message\": \"Customer already has an upcoming active test drive appointment.\"\n}"
+            },
+            {
+              "name": "Slot Unavailable (409 Conflict)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "api_key",
+                      "value": "{{api_key}}",
+                      "type": "text",
+                      "description": "Yes | Your API Key."
+                    },
+                    {
+                      "key": "customer_phone",
+                      "value": "",
+                      "type": "text",
+                      "description": "Yes | Customer phone number."
+                    },
+                    {
+                      "key": "customer_name",
+                      "value": "",
+                      "type": "text",
+                      "description": "Yes | Customer name."
+                    },
+                    {
+                      "key": "car",
+                      "value": "",
+                      "type": "text",
+                      "description": "Yes | Selected vehicle model name."
+                    },
+                    {
+                      "key": "showroom",
+                      "value": "",
+                      "type": "text",
+                      "description": "Yes | Showroom ID."
+                    },
+                    {
+                      "key": "date",
+                      "value": "",
+                      "type": "text",
+                      "description": "Yes | Appointment date (YYYY-MM-DD)."
+                    },
+                    {
+                      "key": "time",
+                      "value": "",
+                      "type": "text",
+                      "description": "Yes | Appointment time (HH:MM)."
+                    },
+                    {
+                      "key": "location_type",
+                      "value": "showroom",
+                      "type": "text",
+                      "description": "Yes | showroom (default) or home. Home ONLY for Renault."
+                    },
+                    {
+                      "key": "home_location_url",
+                      "value": "",
+                      "type": "text",
+                      "description": "No | Customer location map link (for home type).",
+                      "disabled": true
+                    },
+                    {
+                      "key": "location_token",
+                      "value": "",
+                      "type": "text",
+                      "description": "No | Unique location token (auto-generated if empty).",
+                      "disabled": true
+                    },
+                    {
+                      "key": "customer_note",
+                      "value": "",
+                      "type": "text",
+                      "description": "No | Optional comments/notes.",
+                      "disabled": true
+                    },
+                    {
+                      "key": "customer_email",
+                      "value": "",
+                      "type": "text",
+                      "description": "No | Optional customer email address.",
+                      "disabled": true
+                    },
+                    {
+                      "key": "license_number",
+                      "value": "",
+                      "type": "text",
+                      "description": "No | Optional driver license or Iqama / National ID number.",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{base_url}}/test_drive/book.php",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "test_drive",
+                    "book.php"
+                  ]
+                },
+                "description": "Final step to submit a test drive booking.\n\nBusiness rules:\n• location_type=home is ONLY allowed for the Renault brand; using it for another brand returns 400.\n• Duplicate rejection: returns 409 Conflict with error_code 'already_booked' plus existing_appointment_id if the phone number already has an active upcoming booking.\n• Slot unavailable: returns 409 Conflict with error_code 'slot_unavailable' if the slot is already reserved.\n\ncall_status values:\n• 'contacted' — booking/request completed successfully, or the customer was reached.\n• 'not_contacted' — pending call schedule / customer not yet contacted.\n• 'failed' — any failure, error or unsuccessful operation."
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": false,\n    \"error_code\": \"slot_unavailable\",\n    \"message\": \"Conflict: This slot (car, showroom, date, and time) has already been booked by another agent or system.\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "19. TD Customer Lookup",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "api_key",
+                  "value": "{{api_key}}",
+                  "type": "text",
+                  "description": "Yes | Your API Key."
+                },
+                {
+                  "key": "customer_phone",
+                  "value": "{{customer_phone}}",
+                  "type": "text",
+                  "description": "Yes | Customer phone number (Format: 05XXXXXXXX)."
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/test_drive/lookup.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "test_drive",
+                "lookup.php"
+              ]
+            },
+            "description": "NEW ENDPOINT. Looks up upcoming active test drives for a customer by phone number.\n\nReturns all appointments for the phone number, sorted newest to oldest (ORDER BY date DESC). Each appointment includes a detailed last_status object and status flags representing one of 3 states:\n\n1. Booked (pending): status='Booked', booking_confirmed=true, booking_cancelled=false, call_status='not_contacted'.\n2. Conducted (completed): status='Conducted', booking_confirmed=true, booking_cancelled=false, call_status='contacted'.\n3. Cancelled: status='Cancelled', booking_confirmed=false, booking_cancelled=true, call_status='cancelled'."
+          },
+          "response": []
+        },
+        {
+          "name": "20. TD Get Single Booking",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/test_drive/get.php?api_key={{api_key}}&appointment_id={{appointment_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "test_drive",
+                "get.php"
+              ],
+              "query": [
+                {
+                  "key": "api_key",
+                  "value": "{{api_key}}",
+                  "description": "Yes | Your API Key."
+                },
+                {
+                  "key": "appointment_id",
+                  "value": "{{appointment_id}}",
+                  "description": "Yes | Booking Appointment ID."
+                }
+              ]
+            },
+            "description": "NEW ENDPOINT. Retrieves full details of a specific test drive booking by appointment ID."
+          },
+          "response": []
+        },
+        {
+          "name": "21. TD Cancel Booking",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "api_key",
+                  "value": "{{api_key}}",
+                  "type": "text",
+                  "description": "Yes | Your API Key."
+                },
+                {
+                  "key": "appointment_id",
+                  "value": "{{appointment_id}}",
+                  "type": "text",
+                  "description": "Yes | Booking Appointment ID to cancel."
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/test_drive/cancel.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "test_drive",
+                "cancel.php"
+              ]
+            },
+            "description": "NEW ENDPOINT. Cancels a test drive booking by appointment ID and frees the customer phone number for re-booking (clears the 'already_booked' block on endpoint 18)."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://ems.wallan.com/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "api_key",
+      "value": "EMS-AI-B299-X721",
+      "type": "string"
+    },
+    {
+      "key": "appointment_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "customer_phone",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
