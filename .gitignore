@@ -4,3 +4,8 @@ node_modules/
 .vercel
 .netlify
 favicon-32.png
+_compare_official.mjs
+_sync_from_official.mjs
+compare-out.txt
+book-cancel-detail.txt
+CHANGELOG_SYNC.md
