@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "EMS API",
-    "description": "Postman collection for the EMS Appointment & Test Drive API (Wallan Group · AI Project).\n\nBase URL: https://ems.wallan.com/api/v1\nAuth: api_key sent in the POST body (recommended) or as a ?api_key= URL parameter.\n\nSynced with https://ems.wallan.com/api/v1/appointment/Documentation.php (21 endpoints, official page Last updated: July 26, 2026 · v1.3.0; TecNext docs sync: August 9, 2026).\n\nCHANGES IN THIS REVISION (Aug 9, 2026 sync)\n• 10. Book Appointment: added optional body param schedule (1 = Rescheduled, 0 = Not rescheduled, default 0)\n• 10. Book Appointment: documented 409 already_booked duplicate service-booking response\n• 11. Cancel Appointment: documented already_cancelled subsequent-cancel response\n• 06 / 19: clarified titles — service booking lookup vs test drive lookup\n• 18. TD Book: documented showroom_not_found and showroom/car validation 400 errors from official docs",
+    "description": "Postman collection for the EMS Appointment & Test Drive API (Wallan Group · AI Project).\n\nBase URL: https://ems.wallan.com/api/v1\nAuth: api_key sent in the POST body (recommended) or as a ?api_key= URL parameter.\n\nSynced with https://ems.wallan.com/api/v1/appointment/Documentation.php (21 endpoints, official page Last updated: July 26, 2026 · v1.3.0).\nLive test-drive APIs re-checked: August 15, 2026.\n\nCHANGES IN THIS REVISION (Aug 15, 2026 — live TD APIs)\n• 17. TD Slots: available_slots is now an array of objects (not time strings). Each object has time_hhmm, duration_min, available. Unavailable slots include reason (CAPACITY_REACHED | SLOT_TAKEN) and appointment_id/app_id when SLOT_TAKEN. Duplicate key \"slots\" mirrors available_slots.\n• 17. TD Slots: response also includes is_holiday, holiday_name, is_dayoff, capacity, booked, total_slots, car, car_model.\n• Refreshed live samples for TD brands/cities/showrooms/cars/slots/lookup/get.\n\nPRIOR (Aug 9, 2026)\n• 10. Book Appointment: optional schedule; already_booked documented\n• 11. Cancel Appointment: already_cancelled documented\n• 06 / 19: service vs test-drive lookup titles\n• 18. TD Book: showroom_not_found and showroom/car validation 400s",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -1197,9 +1197,122 @@
                 }
               ]
             },
-            "description": "Retrieves all available test drive time slots for a showroom, vehicle and date.\n\nCHANGED: car_model is now required and brand_id is now optional (previously brand_id + showroom_id + date).\n\nReturns available_slots as a simple array of 24-hour time strings (e.g. [\"09:00\", \"10:00\", \"16:00\"]) specific to the requested vehicle, showroom and date."
+            "description": "Retrieves all test drive time slots for a showroom, vehicle and date.\n\nCHANGED (live API, Aug 2026): available_slots is no longer a simple array of time strings.\n\nEach item is an object:\n• time_hhmm — 24-hour time (e.g. \"09:00\")\n• duration_min — slot length in minutes (typically 60)\n• available — true if the slot can be booked\n• reason — only when available=false: CAPACITY_REACHED or SLOT_TAKEN\n• appointment_id / app_id — only when reason=SLOT_TAKEN\n\nA duplicate \"slots\" array mirrors available_slots.\n\nAlso returns: is_holiday, holiday_name, is_dayoff, capacity, booked, total_slots, car, car_model.\n\nRequest params unchanged: showroom_id + car_model + date required; brand_id optional (default 1 / Hyundai)."
           },
-          "response": []
+          "response": [
+            {
+              "name": "Available slots (objects)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/test_drive/available_slots.php?api_key={{api_key}}&showroom_id=&car_model=&date=&brand_id=1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "test_drive",
+                    "available_slots.php"
+                  ],
+                  "query": [
+                    {
+                      "key": "api_key",
+                      "value": "{{api_key}}",
+                      "description": "Yes | Your API Key."
+                    },
+                    {
+                      "key": "showroom_id",
+                      "value": "",
+                      "description": "Yes | Showroom ID (alias: showroom)."
+                    },
+                    {
+                      "key": "car_model",
+                      "value": "",
+                      "description": "Yes | Vehicle model name (aliases: car, model_code)."
+                    },
+                    {
+                      "key": "date",
+                      "value": "",
+                      "description": "Yes | Appointment date (YYYY-MM-DD)."
+                    },
+                    {
+                      "key": "brand_id",
+                      "value": "1",
+                      "description": "No | Brand (Franchise) ID. Default: 1 (Hyundai)."
+                    }
+                  ]
+                },
+                "description": "Retrieves all test drive time slots for a showroom, vehicle and date.\n\nCHANGED (live API, Aug 2026): available_slots is no longer a simple array of time strings.\n\nEach item is an object:\n• time_hhmm — 24-hour time (e.g. \"09:00\")\n• duration_min — slot length in minutes (typically 60)\n• available — true if the slot can be booked\n• reason — only when available=false: CAPACITY_REACHED or SLOT_TAKEN\n• appointment_id / app_id — only when reason=SLOT_TAKEN\n\nA duplicate \"slots\" array mirrors available_slots.\n\nAlso returns: is_holiday, holiday_name, is_dayoff, capacity, booked, total_slots, car, car_model.\n\nRequest params unchanged: showroom_id + car_model + date required; brand_id optional (default 1 / Hyundai)."
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"date\": \"2026-08-15\",\n    \"showroom_id\": 15,\n    \"is_holiday\": false,\n    \"holiday_name\": \"\",\n    \"is_dayoff\": false,\n    \"capacity\": 10,\n    \"booked\": 0,\n    \"total_slots\": 8,\n    \"car\": \"Venue\",\n    \"car_model\": \"Venue\",\n    \"available_slots\": [\n        {\n            \"time_hhmm\": \"09:00\",\n            \"duration_min\": 60,\n            \"available\": true\n        },\n        {\n            \"time_hhmm\": \"10:00\",\n            \"duration_min\": 60,\n            \"available\": true\n        },\n        {\n            \"time_hhmm\": \"11:00\",\n            \"duration_min\": 60,\n            \"available\": true\n        },\n        {\n            \"time_hhmm\": \"12:00\",\n            \"duration_min\": 60,\n            \"available\": true\n        },\n        {\n            \"time_hhmm\": \"16:00\",\n            \"duration_min\": 60,\n            \"available\": true\n        },\n        {\n            \"time_hhmm\": \"17:00\",\n            \"duration_min\": 60,\n            \"available\": true\n        },\n        {\n            \"time_hhmm\": \"18:00\",\n            \"duration_min\": 60,\n            \"available\": true\n        },\n        {\n            \"time_hhmm\": \"19:00\",\n            \"duration_min\": 60,\n            \"available\": true\n        }\n    ],\n    \"slots\": [\n        {\n            \"time_hhmm\": \"09:00\",\n            \"duration_min\": 60,\n            \"available\": true\n        },\n        {\n            \"time_hhmm\": \"10:00\",\n            \"duration_min\": 60,\n            \"available\": true\n        },\n        {\n            \"time_hhmm\": \"11:00\",\n            \"duration_min\": 60,\n            \"available\": true\n        },\n        {\n            \"time_hhmm\": \"12:00\",\n            \"duration_min\": 60,\n            \"available\": true\n        },\n        {\n            \"time_hhmm\": \"16:00\",\n            \"duration_min\": 60,\n            \"available\": true\n        },\n        {\n            \"time_hhmm\": \"17:00\",\n            \"duration_min\": 60,\n            \"available\": true\n        },\n        {\n            \"time_hhmm\": \"18:00\",\n            \"duration_min\": 60,\n            \"available\": true\n        },\n        {\n            \"time_hhmm\": \"19:00\",\n            \"duration_min\": 60,\n            \"available\": true\n        }\n    ]\n}"
+            },
+            {
+              "name": "Unavailable — CAPACITY_REACHED / SLOT_TAKEN",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/test_drive/available_slots.php?api_key={{api_key}}&showroom_id=&car_model=&date=&brand_id=1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "test_drive",
+                    "available_slots.php"
+                  ],
+                  "query": [
+                    {
+                      "key": "api_key",
+                      "value": "{{api_key}}",
+                      "description": "Yes | Your API Key."
+                    },
+                    {
+                      "key": "showroom_id",
+                      "value": "",
+                      "description": "Yes | Showroom ID (alias: showroom)."
+                    },
+                    {
+                      "key": "car_model",
+                      "value": "",
+                      "description": "Yes | Vehicle model name (aliases: car, model_code)."
+                    },
+                    {
+                      "key": "date",
+                      "value": "",
+                      "description": "Yes | Appointment date (YYYY-MM-DD)."
+                    },
+                    {
+                      "key": "brand_id",
+                      "value": "1",
+                      "description": "No | Brand (Franchise) ID. Default: 1 (Hyundai)."
+                    }
+                  ]
+                },
+                "description": "Retrieves all test drive time slots for a showroom, vehicle and date.\n\nCHANGED (live API, Aug 2026): available_slots is no longer a simple array of time strings.\n\nEach item is an object:\n• time_hhmm — 24-hour time (e.g. \"09:00\")\n• duration_min — slot length in minutes (typically 60)\n• available — true if the slot can be booked\n• reason — only when available=false: CAPACITY_REACHED or SLOT_TAKEN\n• appointment_id / app_id — only when reason=SLOT_TAKEN\n\nA duplicate \"slots\" array mirrors available_slots.\n\nAlso returns: is_holiday, holiday_name, is_dayoff, capacity, booked, total_slots, car, car_model.\n\nRequest params unchanged: showroom_id + car_model + date required; brand_id optional (default 1 / Hyundai)."
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"date\": \"2026-08-15\",\n    \"showroom_id\": 6,\n    \"is_holiday\": false,\n    \"holiday_name\": \"\",\n    \"is_dayoff\": false,\n    \"capacity\": 10,\n    \"booked\": 10,\n    \"total_slots\": 10,\n    \"car\": \"New Duster / Showroom\",\n    \"car_model\": \"New Duster / Showroom\",\n    \"available_slots\": [\n        {\n            \"time_hhmm\": \"10:00\",\n            \"duration_min\": 60,\n            \"available\": false,\n            \"reason\": \"CAPACITY_REACHED\"\n        },\n        {\n            \"time_hhmm\": \"11:00\",\n            \"duration_min\": 60,\n            \"available\": false,\n            \"reason\": \"CAPACITY_REACHED\"\n        },\n        {\n            \"time_hhmm\": \"13:00\",\n            \"duration_min\": 60,\n            \"available\": false,\n            \"reason\": \"CAPACITY_REACHED\"\n        },\n        {\n            \"time_hhmm\": \"14:00\",\n            \"duration_min\": 60,\n            \"available\": false,\n            \"reason\": \"CAPACITY_REACHED\"\n        },\n        {\n            \"time_hhmm\": \"15:00\",\n            \"duration_min\": 60,\n            \"available\": false,\n            \"reason\": \"CAPACITY_REACHED\"\n        },\n        {\n            \"time_hhmm\": \"16:00\",\n            \"duration_min\": 60,\n            \"available\": false,\n            \"reason\": \"CAPACITY_REACHED\"\n        },\n        {\n            \"time_hhmm\": \"17:00\",\n            \"duration_min\": 60,\n            \"available\": false,\n            \"reason\": \"CAPACITY_REACHED\"\n        },\n        {\n            \"time_hhmm\": \"18:00\",\n            \"duration_min\": 60,\n            \"available\": false,\n            \"reason\": \"CAPACITY_REACHED\"\n        },\n        {\n            \"time_hhmm\": \"19:00\",\n            \"duration_min\": 60,\n            \"available\": false,\n            \"reason\": \"SLOT_TAKEN\",\n            \"appointment_id\": 1874,\n            \"app_id\": 1874\n        },\n        {\n            \"time_hhmm\": \"20:00\",\n            \"duration_min\": 60,\n            \"available\": false,\n            \"reason\": \"CAPACITY_REACHED\"\n        }\n    ],\n    \"slots\": [\n        {\n            \"time_hhmm\": \"10:00\",\n            \"duration_min\": 60,\n            \"available\": false,\n            \"reason\": \"CAPACITY_REACHED\"\n        },\n        {\n            \"time_hhmm\": \"11:00\",\n            \"duration_min\": 60,\n            \"available\": false,\n            \"reason\": \"CAPACITY_REACHED\"\n        },\n        {\n            \"time_hhmm\": \"13:00\",\n            \"duration_min\": 60,\n            \"available\": false,\n            \"reason\": \"CAPACITY_REACHED\"\n        },\n        {\n            \"time_hhmm\": \"14:00\",\n            \"duration_min\": 60,\n            \"available\": false,\n            \"reason\": \"CAPACITY_REACHED\"\n        },\n        {\n            \"time_hhmm\": \"15:00\",\n            \"duration_min\": 60,\n            \"available\": false,\n            \"reason\": \"CAPACITY_REACHED\"\n        },\n        {\n            \"time_hhmm\": \"16:00\",\n            \"duration_min\": 60,\n            \"available\": false,\n            \"reason\": \"CAPACITY_REACHED\"\n        },\n        {\n            \"time_hhmm\": \"17:00\",\n            \"duration_min\": 60,\n            \"available\": false,\n            \"reason\": \"CAPACITY_REACHED\"\n        },\n        {\n            \"time_hhmm\": \"18:00\",\n            \"duration_min\": 60,\n            \"available\": false,\n            \"reason\": \"CAPACITY_REACHED\"\n        },\n        {\n            \"time_hhmm\": \"19:00\",\n            \"duration_min\": 60,\n            \"available\": false,\n            \"reason\": \"SLOT_TAKEN\",\n            \"appointment_id\": 1874,\n            \"app_id\": 1874\n        },\n        {\n            \"time_hhmm\": \"20:00\",\n            \"duration_min\": 60,\n            \"available\": false,\n            \"reason\": \"CAPACITY_REACHED\"\n        }\n    ]\n}"
+            }
+          ]
         },
         {
           "name": "18. TD Book Appointment",
@@ -1692,7 +1805,7 @@
                 "lookup.php"
               ]
             },
-            "description": "Test Drive Lookup API (for test drive bookings). Looks up upcoming active test drives for a customer by phone number.\n\nReturns all appointments for the phone number, sorted newest to oldest (ORDER BY date DESC). Each appointment includes a detailed last_status object and status flags representing one of 3 states:\n\n1. Booked (pending): status='Booked', booking_confirmed=true, booking_cancelled=false, call_status='not_contacted'.\n2. Conducted (completed): status='Conducted', booking_confirmed=true, booking_cancelled=false, call_status='contacted'.\n3. Cancelled: status='Cancelled', booking_confirmed=false, booking_cancelled=true, call_status='cancelled'."
+            "description": "Test Drive Lookup API (for test drive bookings). Looks up upcoming active test drives for a customer by phone number.\n\nReturns all appointments for the phone number, sorted newest to oldest (ORDER BY date DESC). Each appointment includes a detailed last_status object and status flags representing one of 3 states:\n\n1. Booked (pending): status='Booked', booking_confirmed=true, booking_cancelled=false, call_status='not_contacted'.\n2. Conducted (completed): status='Conducted', booking_confirmed=true, booking_cancelled=false, call_status='contacted'.\n3. Cancelled: status='Cancelled', booking_confirmed=false, booking_cancelled=true, call_status='cancelled'.\n\nLive responses may include many historical appointments (count can be > displayed examples)."
           },
           "response": []
         },

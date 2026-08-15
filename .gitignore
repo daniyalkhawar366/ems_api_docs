@@ -9,3 +9,7 @@ _sync_from_official.mjs
 compare-out.txt
 book-cancel-detail.txt
 CHANGELOG_SYNC.md
+_compare_official.mjs
+_td_live_diff.mjs
+_td_live.json
+_apply_td_live.mjs
