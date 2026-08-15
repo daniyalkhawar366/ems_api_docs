@@ -13,3 +13,4 @@ _compare_official.mjs
 _td_live_diff.mjs
 _td_live.json
 _apply_td_live.mjs
+_td_catalog.json

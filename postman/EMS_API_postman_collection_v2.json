@@ -1084,7 +1084,7 @@
                 }
               ]
             },
-            "description": "Retrieves cities configured for a specific brand."
+            "description": "Retrieves cities configured for a specific brand.\n\nLive catalog snapshot (fetched 2026-08-15):\n• Hyundai (id 1): Buraydah#18 [Qasim#15]; Hail#19 [Hail#16]; Riyadh#20 [Badiya#17, Exit 30#18, Exit 5#19, Shifa#20, Tuwaiq#21, Wallan Head Office#22]; Unaizah#21 [Unaizah#23]; Sakaka#22 [Al Jouf#24]\n• Geely (id 2): Riyadh#13 [Geely Khurais Showroom#12]\n• Genesis (id 3): Riyadh#11 [Khurais New Cars Showroom#9, Genesis Showroom Exit 2#10]\n• Al Aslee (id 4): no cities\n• Renault (id 5): Riyadh#7 [معرض رينو الرياض الوعلان#6]; Damam#9 [معرض رينو الدمام الوعلان#7]; Geddah#10 [معرض رينو جدة الوعلان#8]\n• Multi-Brand (id 6): no cities\n• Zeekr (id 7): Riyadh#12 [ZEEKR Riyadh Showroom#11]\n• Louts (id 8): no cities\n• Training (id 9): no cities"
           },
           "response": []
         },
@@ -1115,7 +1115,7 @@
                 }
               ]
             },
-            "description": "Retrieves showrooms available in a specific city."
+            "description": "Retrieves showrooms available in a specific city.\n\nSample below uses the city with the most showrooms from the live walk.\n\nLive catalog snapshot (fetched 2026-08-15):\n• Hyundai (id 1): Buraydah#18 [Qasim#15]; Hail#19 [Hail#16]; Riyadh#20 [Badiya#17, Exit 30#18, Exit 5#19, Shifa#20, Tuwaiq#21, Wallan Head Office#22]; Unaizah#21 [Unaizah#23]; Sakaka#22 [Al Jouf#24]\n• Geely (id 2): Riyadh#13 [Geely Khurais Showroom#12]\n• Genesis (id 3): Riyadh#11 [Khurais New Cars Showroom#9, Genesis Showroom Exit 2#10]\n• Al Aslee (id 4): no cities\n• Renault (id 5): Riyadh#7 [معرض رينو الرياض الوعلان#6]; Damam#9 [معرض رينو الدمام الوعلان#7]; Geddah#10 [معرض رينو جدة الوعلان#8]\n• Multi-Brand (id 6): no cities\n• Zeekr (id 7): Riyadh#12 [ZEEKR Riyadh Showroom#11]\n• Louts (id 8): no cities\n• Training (id 9): no cities"
           },
           "response": []
         },
@@ -1151,7 +1151,7 @@
                 }
               ]
             },
-            "description": "Retrieves cars and location booking types (showroom / home) for the brand + showroom.\n\nRenault per-car location rules:\n• Models containing '/ Showroom' → restricted to [\"showroom\"] only.\n• Models containing '/ Home' → restricted to [\"home\"] only.\n• Models with neither suffix → support both [\"showroom\", \"home\"].\n• All other brands → return [\"showroom\"] only."
+            "description": "Retrieves cars and location booking types (showroom / home) for the brand + showroom.\n\nRenault per-car location rules:\n• Models containing '/ Showroom' → restricted to [\"showroom\"] only.\n• Models containing '/ Home' → restricted to [\"home\"] only.\n• Models with neither suffix → support both [\"showroom\", \"home\"].\n• All other brands → return [\"showroom\"] only.\n\nSample below is the showroom with the largest car list from the live walk."
           },
           "response": []
         },
